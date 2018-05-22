@@ -1,0 +1,7 @@
+```
+npm install
+./node_modules/.bin/tsc
+node ./dist/server/server.js
+```
+
+Smart Websocket Client: ws://localhost:8999
