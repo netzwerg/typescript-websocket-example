@@ -1,10 +1,11 @@
-import * as React from 'react';
 import './App.css';
-
+import * as React from 'react';
 import logo from './logo.svg';
+import TimeSeries from './TimeSeries';
+import { Data } from './types';
 
 export type State = {
-    readonly data: number[]
+    readonly data: Data[]
 }
 
 class App extends React.Component<{}, State> {
@@ -17,12 +18,10 @@ class App extends React.Component<{}, State> {
     public componentDidMount() {
         const ws = new WebSocket('ws://localhost:8999');
 
-        ws.onopen = () => console.log('open');
-
         ws.onmessage = (evt: MessageEvent) => {
-            console.log('Yay, data!');
+            const data: Data = JSON.parse(evt.data);
             this.setState((prevState: State) => {
-                return {data: prevState.data.concat(evt.data)}
+                return {data: prevState.data.concat(data)}
             })
         };
 
@@ -33,17 +32,9 @@ class App extends React.Component<{}, State> {
             <div className="App">
                 <header className="App-header">
                     <img src={logo} className="App-logo" alt="logo"/>
-                    <h1 className="App-title">Welcome to React</h1>
+                    <h1 className="App-title">WebSocket Client Demo</h1>
                 </header>
-                <table>
-                    <tbody>
-                    {
-                        this.state.data.map((n: number, index: number) => <tr key={index}>
-                            <td>{n}</td>
-                        </tr>)
-                    }
-                    </tbody>
-                </table>
+                <TimeSeries data={this.state.data}/>
             </div>
         );
     }
