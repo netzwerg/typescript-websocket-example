@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Data } from './types';
 import { scaleLinear } from 'd3-scale';
+import { slidingTimeWindowSec } from './utils';
 
 const width = 400;
 const height = 200;
@@ -10,7 +11,7 @@ type Props = {
     readonly data: Data[]
 }
 
-class TimeSeries extends React.Component<Props, {}> {
+class CanvasTimeSeries extends React.Component<Props, {}> {
 
     private readonly canvasRef = React.createRef<HTMLCanvasElement>();
 
@@ -34,7 +35,7 @@ class TimeSeries extends React.Component<Props, {}> {
 
         const now = Date.now();
         const scaleX = scaleLinear()
-            .domain([now - 5 * 1000, now])
+            .domain([now - slidingTimeWindowSec * 1000, now])
             .range([0, width]);
 
         ctx.clearRect(0, 0, width, height);
@@ -58,4 +59,4 @@ class TimeSeries extends React.Component<Props, {}> {
 
 }
 
-export default TimeSeries;
+export default CanvasTimeSeries;
